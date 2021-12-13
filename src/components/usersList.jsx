@@ -1,12 +1,8 @@
-import React, { useState } from "react";
-import api from '../api'
+import React from "react";
+import User from './user'
 
-const Users = () => {
-    const [users, setUsers] = useState(api.users.fetchAll())
-
-    const handleDelete = (userID) => {
-        setUsers(users.filter(user => user._id !== userID))
-    }
+const UsersList = (props) => {
+    const users = props.users
 
     const renderPhrase = (number) => {
         const lastOne = Number(number.toString().slice(-1))
@@ -40,18 +36,7 @@ const Users = () => {
                     <tbody>
 
                     {users.map(user => (
-                        <tr key={user._id}>
-                            <td>{user.name}</td>
-                            <td>{user.qualities.map(item =>
-                                <span key={item.id} className={'badge m-1 bg-'+item.color}>{item.name}</span>
-                            )}</td>
-                            <td>{user.profession.name}</td>
-                            <td>{user.completedMeetings}</td>
-                            <td>{user.rate}</td>
-                            <td>
-                                <button className={'btn btn-danger'} onClick={() => handleDelete(user._id)}>Delete</button>
-                            </td>
-                        </tr>
+                        <User key={user._id} {...user} onDelete={props.onDelete}/>
                     ))}
 
                     </tbody>
@@ -61,4 +46,4 @@ const Users = () => {
     )
 }
 
-export default Users
+export default UsersList
