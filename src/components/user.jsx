@@ -1,5 +1,6 @@
 import React from 'react'
 import Qualities from "./qualities";
+import Bookmark from "./bookmark";
 
 const User = (props) => {
     return (
@@ -13,6 +14,9 @@ const User = (props) => {
             <td>{props.profession.name}</td>
             <td>{props.completedMeetings}</td>
             <td>{props.rate}</td>
+            <td className='align-middle text-center'>
+                <Bookmark user={props}/>
+            </td>
             <td>
                 <button className={'btn btn-danger'} onClick={() => props.onDelete(props._id)}>Delete</button>
             </td>
