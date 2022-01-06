@@ -1,16 +1,24 @@
 import React from "react";
 import PropTypes from "prop-types";
-import TableHeader from "./tableHeader";
-import TableBody from "./tableBody";
+import Bookmark from "./bookmark";
+import QualitiesList from "./qualitiesList";
+import Table from "./table";
 
-const UsersTable = ({ users, onSort, selectedSort, handlers }) => {
+const UsersTable = ({
+    users,
+    onSort,
+    selectedSort,
+    onDelete,
+    onToggleBookmark
+}) => {
     const columns = {
         name: {
             path: "name",
             name: "Имя"
         },
         qualities: {
-            name: "Качества"
+            name: "Качества",
+            component: (user) => <QualitiesList qualities={user.qualities} />
         },
         professions: {
             path: "profession.name",
@@ -26,21 +34,39 @@ const UsersTable = ({ users, onSort, selectedSort, handlers }) => {
         },
         bookmark: {
             path: "bookmark",
-            name: "Избранное"
+            name: "Избранное",
+            component: (user) => (
+                <Bookmark
+                    user={user}
+                    onToggleBookmark={() => onToggleBookmark(user._id)}
+                />
+            )
         },
-        delete: {}
+        delete: {
+            component: (user) => (
+                <button
+                    className="btn btn-danger"
+                    onClick={() => onDelete(user._id)}
+                >
+                    Delete
+                </button>
+            )
+        }
     };
     return (
-        <table className="table">
-            <TableHeader {...{ onSort, selectedSort, columns }} />
-            <TableBody {...{ columns, data: users }} />
-        </table>
+        <Table
+            onSort={onSort}
+            selectedSort={selectedSort}
+            columns={columns}
+            data={users}
+        />
     );
 };
 
 UsersTable.propTypes = {
     users: PropTypes.array.isRequired,
-    handlers: PropTypes.objectOf(PropTypes.func),
+    onDelete: PropTypes.func.isRequired,
+    onToggleBookmark: PropTypes.func.isRequired,
     onSort: PropTypes.func.isRequired,
     selectedSort: PropTypes.object.isRequired
 };

@@ -1,0 +1,19 @@
+import React from "react";
+import PropTypes from "prop-types";
+import Qualities from "./qualities";
+
+const QualitiesList = ({ qualities }) => {
+    return (
+        <>
+            {qualities.map((qual) => {
+                return <Qualities key={qual._id} {...qual} />;
+            })}
+        </>
+    );
+};
+
+QualitiesList.propTypes = {
+    qualities: PropTypes.array
+};
+
+export default QualitiesList;
