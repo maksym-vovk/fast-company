@@ -66,11 +66,13 @@ const UsersList = () => {
             : users;
 
         const count = filteredUsers.length;
+
         const sortedUsers = _.orderBy(
             filteredUsers,
             [sortBy.path],
             [sortBy.order]
         );
+
         const userCrop = paginate(sortedUsers, currentPage, pageSize);
 
         const clearFilter = () => {
