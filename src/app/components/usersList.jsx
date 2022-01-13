@@ -6,6 +6,7 @@ import api from "../api";
 import SearchResults from "./searchResults";
 import UsersTable from "./usersTable.jsx";
 import _ from "lodash";
+import SearchField from "./searchField";
 
 const UsersList = () => {
     const pageSize = 4;
@@ -15,6 +16,7 @@ const UsersList = () => {
     const [selectedProf, setSelectedProf] = useState({});
     const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
     const [users, setUsers] = useState([]);
+    const [searchValue, setSearchValue] = useState("");
 
     useEffect(() => {
         api.users.fetchAll().then((data) => {
@@ -53,6 +55,7 @@ const UsersList = () => {
     };
 
     const handleProfessionSelect = (item) => {
+        setSearchValue("");
         setSelectedProf(item);
     };
 
@@ -61,14 +64,18 @@ const UsersList = () => {
             ? users.filter(
                 (user) =>
                     JSON.stringify(user.profession) ===
-                    JSON.stringify(selectedProf)
+                    JSON.stringify(selectedProf) && user.name.includes(searchValue)
             )
             : users;
 
-        const count = filteredUsers.length;
+        const searchedUsers = searchValue.length
+            ? users.filter((user) => user.name.toLowerCase().includes(searchValue.toLowerCase()))
+            : filteredUsers;
+
+        const count = searchedUsers.length;
 
         const sortedUsers = _.orderBy(
-            filteredUsers,
+            searchedUsers,
             [sortBy.path],
             [sortBy.order]
         );
@@ -82,6 +89,16 @@ const UsersList = () => {
         const handleSort = (item) => {
             setCurrentPage(1);
             setSortBy(item);
+        };
+
+        const handleSearch = (event) => {
+            const { target } = event;
+
+            setSearchValue(target.value);
+
+            if (Object.keys(selectedProf).length) {
+                clearFilter();
+            }
         };
 
         return (
@@ -103,6 +120,10 @@ const UsersList = () => {
                 )}
                 <div className="d-flex flex-column">
                     <SearchResults length={count} />
+                    <SearchField
+                        handleSearch={handleSearch}
+                        searchValue={searchValue}
+                    />
                     {count > 0 && (
                         <UsersTable
                             users={userCrop}
