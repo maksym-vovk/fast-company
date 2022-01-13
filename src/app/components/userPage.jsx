@@ -9,7 +9,7 @@ const UserPage = ({ userId }) => {
     const [user, setUser] = useState();
 
     useEffect(() => {
-        api.users.getById(userId).then(data => setUser(data));
+        api.users.getById(userId).then((data) => setUser(data));
     });
 
     const handleClick = () => {
@@ -21,7 +21,7 @@ const UserPage = ({ userId }) => {
             <div>
                 <h1>{user.name}</h1>
                 <h2>Profession: {user.profession.name}</h2>
-                <QualitiesList qualities={user.qualities}/>
+                <QualitiesList qualities={user.qualities} />
                 <p>Completed meetings: {user.completedMeetings}</p>
                 <p>Rate: {user.rate}</p>
                 <button onClick={handleClick}>All users</button>

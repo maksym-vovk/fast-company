@@ -7,11 +7,7 @@ const Users = () => {
     const params = useParams();
     const { userId } = params;
 
-    return (
-        <>
-            {userId ? <UserPage userId={userId}/> : <UsersList/>}
-        </>
-    );
+    return <>{userId ? <UserPage userId={userId} /> : <UsersList />}</>;
 };
 
 export default Users;
