@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import Pagination from "./pagination";
-import GroupList from "./groupList";
-import { paginate } from "../utils/paginate";
-import api from "../api";
-import SearchResults from "./searchResults";
-import UsersTable from "./usersTable.jsx";
+import Pagination from "../../pagination";
+import GroupList from "../../groupList";
+import { paginate } from "../../../../utils/paginate";
+import api from "../../../../api";
+import SearchResults from "../../../ui/searchResults";
+import UsersTable from "../../../ui/usersTable.jsx";
 import _ from "lodash";
-import SearchField from "./searchField";
+import SearchField from "../../../ui/searchField";
 
-const UsersList = () => {
+const UsersListPage = () => {
     const pageSize = 4;
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -48,7 +48,7 @@ const UsersList = () => {
 
     useEffect(() => {
         setCurrentPage(1);
-    }, [selectedProf]);
+    }, [selectedProf, searchValue]);
 
     const handlePageChange = (pageIndex) => {
         setCurrentPage(pageIndex);
@@ -61,15 +61,15 @@ const UsersList = () => {
 
     if (users.length) {
         const filteredUsers = selectedProf?._id
-            ? users.filter(
-                (user) =>
-                    JSON.stringify(user.profession) ===
-                    JSON.stringify(selectedProf) && user.name.includes(searchValue)
+            ? users.filter((user) =>
+                JSON.stringify(user.profession) === JSON.stringify(selectedProf) && user.name.includes(searchValue)
             )
             : users;
 
         const searchedUsers = searchValue.length
-            ? users.filter((user) => user.name.toLowerCase().includes(searchValue.toLowerCase()))
+            ? users.filter((user) =>
+                user.name.toLowerCase().includes(searchValue.toLowerCase())
+            )
             : filteredUsers;
 
         const count = searchedUsers.length;
@@ -148,4 +148,4 @@ const UsersList = () => {
     return "Loading...";
 };
 
-export default UsersList;
+export default UsersListPage;
