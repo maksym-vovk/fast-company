@@ -1,29 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { validator } from "../../utils/validator";
 import TextField from "../common/form/textField";
+import api from "../../api";
+import SelectField from "../common/form/selectField";
+import RadioField from "../common/form/radioField";
+import MultiSelectField from "../common/form/multiSelectField";
 import CheckBoxField from "../common/form/checkBoxField";
-// import * as yup from "yup";
 
-const LoginForm = () => {
+const RegisterForm = () => {
     // const [email, setEmail] = useState("");
     // const [password, setPassword] = useState("");
 
     const [data, setData] = useState({
         email: "",
         password: "",
-        stayOn: false
+        profession: "",
+        sex: "male",
+        qualities: [],
+        licence: false
     });
     const [errors, setErrors] = useState({});
+    const [professions, setProfessions] = useState([]);
+    const [qualities, setQualities] = useState({});
 
-    // const validateScheme = yup.object().shape({
-    //     password: yup.string()
-    //         .required("Password is required")
-    //         .matches(/^(?=.*[A-Z])/, "Password doesn't have capital letters")
-    //         .matches(/^(?=.*[0-9])/, "Password doesn't have digit")
-    //         .matches(/^(?=.*[!@#$%^&*])/, "Password must include symbols")
-    //         .matches(/^(?=.{8,})/, "Password must contains max 8 symbols"),
-    //     email: yup.string().required("Email is required").email("Incorrect email")
-    // });
+    useEffect(() => {
+        api.professions.fetchAll().then(data => setProfessions(data));
+        api.qualities.fetchAll().then(data => setQualities(data));
+    }, []);
 
     const validatorConfig = {
         email: {
@@ -49,6 +52,16 @@ const LoginForm = () => {
                 message: "Password must contains max 8 symbols",
                 value: 8
             }
+        },
+        profession: {
+            isRequired: {
+                message: "Choose your profession"
+            }
+        },
+        licence: {
+            isRequired: {
+                message: "You must confirm our agreement"
+            }
         }
     };
 
@@ -58,8 +71,6 @@ const LoginForm = () => {
 
     const validate = () => {
         const errors = validator(data, validatorConfig);
-
-        // validateScheme.validate(data).then(() => setErrors({})).catch((err) => setErrors({ [err.path]: err.message }));
 
         setErrors(errors);
 
@@ -102,12 +113,43 @@ const LoginForm = () => {
                 error={errors.password}
             />
 
-            <CheckBoxField
-                value={data.stayOn}
-                name="stayOn"
+            <SelectField
+                label="Choose profession"
+                value={data.profession}
+                name="professions"
                 onChange={handleChange}
+                defaultOption="Choose.."
+                options={professions}
+                error={errors.profession}
+            />
+
+            <RadioField
+                options={[
+                    { name: "Male", value: "male" },
+                    { name: "Female", value: "female" },
+                    { name: "Other", value: "other" }
+                ]}
+                value={data.sex}
+                name="sex"
+                onChange={handleChange}
+                label="Choose sex"
+            />
+
+            <MultiSelectField
+                options={qualities}
+                onChange={handleChange}
+                name="qualities"
+                label="Choose qualities"
+                defaultValue={data.qualities}
+            />
+
+            <CheckBoxField
+                value={data.licence}
+                name="licence"
+                onChange={handleChange}
+                error={errors.licence}
             >
-                Remain in the system
+                Confirm <a>licence agreement</a>
             </CheckBoxField>
 
             <button
@@ -121,4 +163,4 @@ const LoginForm = () => {
     );
 };
 
-export default LoginForm;
+export default RegisterForm;

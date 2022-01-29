@@ -12,16 +12,20 @@ const TextField = ({ label, type, name, value, onChange, error }) => {
         setShowPassword((prevState) => !prevState);
     };
 
+    const handleChange = ({ target }) => {
+        onChange({ name: target.name, value: target.value });
+    };
+
     return (
         <div className="mb-4">
-            <label htmlFor="email">{label}</label>
+            <label htmlFor={name}>{label}</label>
             <div className="input-group has-validation">
                 <input
-                    type={showPassword ? "text" : "password"}
+                    type={(type === "text") ? "text" : (showPassword) ? "text" : "password"}
                     id={name}
                     name={name}
                     value={value}
-                    onChange={onChange}
+                    onChange={handleChange}
                     className={getInputClasses()}
                 />
                 {type === "password" && (
