@@ -40,7 +40,7 @@ const UsersListPage = () => {
         api.professions.fetchAll().then((data) =>
             setProfessions(
                 Object.assign(data, {
-                    allProfession: { name: "Все професии" }
+                    allProfession: { name: "Все професии", _id: "allProfessions12716312937" }
                 })
             )
         );

@@ -1,4 +1,4 @@
-export const qualities = {
+const qualities = {
     tedious: {
         _id: "67rdca3eeb7f6fgeed471198",
         name: "Нудила",
@@ -30,14 +30,12 @@ export const qualities = {
         color: "dark"
     }
 };
-
-const fetchAll = () => {
-    return new Promise((resolve) => {
+const fetchAll = () =>
+    new Promise((resolve) => {
         window.setTimeout(function () {
             resolve(qualities);
         }, 2000);
     });
-};
 
 export default {
     fetchAll
